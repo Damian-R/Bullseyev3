@@ -1,6 +1,7 @@
 package com.example.damia.bullseyev3.fragments;
 
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.damia.bullseyev3.R;
 import com.example.damia.bullseyev3.fragments.summaryFrag;
+import com.example.damia.bullseyev3.game.BullGame;
 
 public class mainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -26,11 +28,27 @@ public class mainFragment extends Fragment {
     private String mParam2;
 
     Button submitBtn;
+    BullGame game;
+    TextView hiddenWordLengthtxt;
+    TextView triesLeft;
 
     OnGuessSubmittedListener guessSubmittedListener;
+    OnGameCreatedListener gameCreatedListener;
 
     public interface OnGuessSubmittedListener{
         public void guessSubmitted(String guess);
+    }
+
+    public interface OnGameCreatedListener{
+        public void gameCreated(BullGame game);
+    }
+
+    public enum ErrorList{
+        OK,
+        Wrong_Length,
+        Not_Isogram,
+        Not_Lowercase,
+        Invalid_Status
     }
 
 
@@ -63,21 +81,75 @@ public class mainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         submitBtn = (Button)v.findViewById(R.id.submit_guess_btn);
+        hiddenWordLengthtxt = (TextView)v.findViewById(R.id.hiddenWordLengthTxt);
+        triesLeft = (TextView)v.findViewById(R.id.triesLeftTxt);
         final EditText guess_txt = (EditText)v.findViewById(R.id.guess_text);
 
         guessSubmittedListener = (OnGuessSubmittedListener) getActivity();
+        gameCreatedListener = (OnGameCreatedListener) getActivity();
+
+        game = new BullGame();
+        hiddenWordLengthtxt.setText("Hidden Word Length: " + game.getHiddenWordLength());
+        triesLeft.setText("Tries Left: " + game.getMaxTries());
+        gameCreatedListener.gameCreated(game);
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String Guess = guess_txt.getText().toString();
                 Log.d("tag", Guess);
-                //check if guess is valid
-                guessSubmittedListener.guessSubmitted(Guess);
+                if(checkGuessValidity(Guess)){
+                    //TODO calculate bulls and cows
+                    //TODO also pass in bulls and cows to the guessSubmittedListener
+                    guessSubmittedListener.guessSubmitted(Guess);
+                }
+                triesLeft.setText("Tries Left: " + (game.getMaxTries() - game.getCurrentTry() + 1));
                 guess_txt.setText("");
             }
         });
 
         return v;
+    }
+
+    public boolean checkGuessValidity(String Guess){
+        ErrorList Status = checkForErrors(Guess);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // get error message
+        switch (Status){
+            case Wrong_Length: builder.setMessage("Wrong Length");
+                break;
+            case Not_Isogram: builder.setMessage("Not Isogram");
+                break;
+            case Not_Lowercase: builder.setMessage("Not Lowercase");
+                break;
+        }
+
+        //if status is not ok
+        if(Status != ErrorList.OK){
+            AlertDialog alert = builder.create(); //create an alert with message describing error
+            alert.show(); //show the alert
+            return false; //return false so the guess is not submitted
+        }
+        else {
+            game.tryComplete();
+            return true; //if guess is valid, return true and add to current try
+        }
+    }
+
+    public ErrorList checkForErrors(String Guess){
+        if(Guess.length() != game.getHiddenWordLength()) return ErrorList.Wrong_Length;
+        else if(!isIsogram(Guess)) return ErrorList.Not_Isogram;
+        else if(!isLowercase(Guess)) return ErrorList.Not_Lowercase;
+        else return ErrorList.OK;
+    }
+
+    public boolean isIsogram(String Guess){
+        return true;
+    }
+
+    public boolean isLowercase(String Guess){
+        return true;
     }
 }
