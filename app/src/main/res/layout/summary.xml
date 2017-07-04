@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:id="@+id/main_layout"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="15dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="guess: test"
+                android:layout_height="wrap_content"
+                android:id="@+id/prev_guess_txt"
+                android:layout_weight="0.76"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:paddingLeft="10dp"
+                android:layout_width="100dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@mipmap/ic_launcher"
+                android:id="@+id/bulls_img"
+                android:layout_weight="0.11" />
+
+            <TextView
+                android:text="5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bulls_txt"
+                android:layout_weight="0.76"
+                android:textSize="36sp"
+                android:textStyle="normal|bold"
+                android:layout_gravity="center" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@android:drawable/ic_lock_lock"
+                android:id="@+id/hits_img"
+                android:layout_weight="0.35" />
+
+            <TextView
+                android:text="3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/hits_txt"
+                android:layout_weight="0.76"
+                android:textSize="36sp"
+                android:textStyle="normal|bold"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>
