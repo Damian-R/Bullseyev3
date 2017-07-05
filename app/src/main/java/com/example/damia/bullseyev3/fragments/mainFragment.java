@@ -22,6 +22,9 @@ import com.example.damia.bullseyev3.R;
 import com.example.damia.bullseyev3.fragments.summaryFrag;
 import com.example.damia.bullseyev3.game.BullGame;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class mainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -50,7 +53,7 @@ public class mainFragment extends Fragment {
         Wrong_Length,
         Not_Isogram,
         Not_Lowercase,
-        Invalid_Status
+        Invalid_Characters,
     }
 
 
@@ -129,10 +132,11 @@ public class mainFragment extends Fragment {
         switch (Status){
             case Wrong_Length: builder.setMessage("Wrong Length");
                 break;
-            case Not_Isogram: builder.setMessage("Not Isogram");
+            case Not_Isogram: builder.setMessage("Your guess must be an isogram. (each character can only appear once)");
                 break;
-            case Not_Lowercase: builder.setMessage("Not Lowercase");
+            case Not_Lowercase: builder.setMessage("Your guess must contain only lowercase letters");
                 break;
+            case Invalid_Characters: builder.setMessage("Invalid input (only characters in the alphabet are permitted)");
         }
 
         //if status is not ok
@@ -168,16 +172,36 @@ public class mainFragment extends Fragment {
 
     public ErrorList checkForErrors(String Guess){
         if(Guess.length() != game.getHiddenWordLength()) return ErrorList.Wrong_Length;
+        else if(!isValidInput(Guess)) return ErrorList.Invalid_Characters;
         else if(!isIsogram(Guess)) return ErrorList.Not_Isogram;
         else if(!isLowercase(Guess)) return ErrorList.Not_Lowercase;
         else return ErrorList.OK;
     }
 
     public boolean isIsogram(String Guess){
-        return true;
+        Map<Character, Boolean> map = new HashMap();
+
+        for(int i = 0; i < Guess.length(); i++){
+            if(map.get(Guess.charAt(i)) == null) //if the value for the key (character) is null (has not been changed since map initialization)
+                map.put(Guess.charAt(i), true); //then set it to true (indicating that it has been seen)
+            else { //else (if the value at the character HAS been changed since initialization, ie. it has been seen)
+                Log.d("Character repeated", "" + Guess.charAt(i));
+                return false; //return false
+            }
+        }
+        return true; //if loop completes no duplicates were found and guess is an isogram
     }
 
     public boolean isLowercase(String Guess){
+        if(Guess.equals(Guess.toLowerCase())) return true;
+        else return false;
+    }
+
+    public boolean isValidInput(String Guess){
+        char[] chars = Guess.toCharArray();
+        for(int i = 0; i < chars.length; i++){
+            if(!Character.isLetter(chars[i])) return false;
+        }
         return true;
     }
 
