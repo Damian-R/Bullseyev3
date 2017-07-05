@@ -29,7 +29,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@mipmap/ic_launcher"
+                app:srcCompat="@mipmap/icon"
                 android:id="@+id/bulls_img"
                 android:layout_weight="0.11" />
 
@@ -41,7 +41,8 @@
                 android:layout_weight="0.76"
                 android:textSize="36sp"
                 android:textStyle="normal|bold"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:paddingLeft="10dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -58,7 +59,8 @@
                 android:layout_weight="0.76"
                 android:textSize="36sp"
                 android:textStyle="normal|bold"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:paddingLeft="10dp" />
 
         </LinearLayout>
     </FrameLayout>
