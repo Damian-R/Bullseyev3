@@ -14,6 +14,7 @@ import com.example.damia.bullseyev3.game.BullGame;
 public class MainActivity extends AppCompatActivity implements mainFragment.OnGuessSubmittedListener, mainFragment.OnGameCreatedListener{
 
     BullGame currentgame;
+    LinearLayout ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
 
     //TODO add parameter for bulls and hits
     public void addSummaryFragment(String Guess, int bulls, int hits){
-        LinearLayout ll = (LinearLayout)findViewById(R.id.linearlayout); //get linear layout
+        ll = (LinearLayout)findViewById(R.id.linearlayout); //get linear layout
         FragmentManager fm = getSupportFragmentManager();
 
         FrameLayout frame = new FrameLayout(this); //new framelayout to hold fragment

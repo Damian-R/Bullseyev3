@@ -2,11 +2,13 @@ package com.example.damia.bullseyev3.fragments;
 
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -102,9 +104,13 @@ public class mainFragment extends Fragment {
                     submitValidGuess(Guess);
                     int bulls = game.getBullsAndHits()[0];
                     int hits = game.getBullsAndHits()[1];
-                    //TODO also pass in bulls and cows to the guessSubmittedListener
-                    guessSubmittedListener.guessSubmitted(Guess, bulls, hits);
+                    if(!game.gameWon) //if game is not won, submit the guess with bulls and hits
+                        guessSubmittedListener.guessSubmitted(Guess, bulls, hits);
+                    else //if game is won, call gameWon() method
+                        gameWon();
                 }
+                if(game.getCurrentTry() > game.getMaxTries()) gameLost(); //if user is out of tries, call gameLost method
+
                 triesLeft.setText("Tries Left: " + (game.getMaxTries() - game.getCurrentTry() + 1)); //update tries left on main fragment
                 guess_txt.setText("");
             }
@@ -118,7 +124,8 @@ public class mainFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        // get error message
+
+        // set alert message based on error type
         switch (Status){
             case Wrong_Length: builder.setMessage("Wrong Length");
                 break;
@@ -131,6 +138,7 @@ public class mainFragment extends Fragment {
         //if status is not ok
         if(Status != ErrorList.OK){
             AlertDialog alert = builder.create(); //create an alert with message describing error
+            alert.setCanceledOnTouchOutside(true);
             alert.show(); //show the alert
             return false; //return false so the guess is not submitted
         }
@@ -146,15 +154,16 @@ public class mainFragment extends Fragment {
             for(int GChar = 0; GChar < hiddenWord.length(); GChar++){ //loop thru all of the guess's characters
                 if(hiddenWord.charAt(HWChar) == Guess.charAt(GChar)){ //if a common character is found
                     if(HWChar == GChar) //same place
-                        game.addBullsAndHits(1,0); //add 1 bull
+                        game.bullsAndHits[0]++; //add 1 bull
                     else //not same place
-                        game.addBullsAndHits(0,1); //add 1 hit
+                        game.bullsAndHits[1]++; //add 1 hit
                 }
             }
         }
 
-        game.tryComplete();
+        if(game.bullsAndHits[0] == hiddenWord.length()) game.gameWon = true;
 
+        game.tryComplete();
     }
 
     public ErrorList checkForErrors(String Guess){
@@ -170,5 +179,34 @@ public class mainFragment extends Fragment {
 
     public boolean isLowercase(String Guess){
         return true;
+    }
+
+    public void gameWon(){ //method called when game is won
+        game.reset(); //reset game data
+
+        LinearLayout ll = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
+        ll.removeAllViews(); //clear linear layout view
+
+        hiddenWordLengthtxt.setText("Hidden Word Length: " + game.getHiddenWordLength());
+        triesLeft.setText("Tries Left: " + game.getMaxTries());
+
+        //TODO fancy game won message
+    }
+
+    public void gameLost(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage("Game over, you ran out of tries");
+        builder.setNegativeButton("Reset game", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                gameWon();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+
+        alert.show();
+
     }
 }

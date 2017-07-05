@@ -4,7 +4,9 @@ public class BullGame {
     private String hiddenWord;
     private int maxTries;
     private int currentTry;
-    private int[] bullsAndHits = {0,0};
+
+    public int[] bullsAndHits = {0,0};
+    public boolean gameWon;
 
     public String getHiddenWord(){ return hiddenWord; }
     public int getHiddenWordLength(){ return hiddenWord.length(); }
@@ -34,6 +36,7 @@ public class BullGame {
         hiddenWord = "ship";
         currentTry = 1;
         maxTries = 5;
+        gameWon = false;
         return;
     }
 }
