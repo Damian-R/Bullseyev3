@@ -33,14 +33,13 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
     // called when user presses submit guess button
     // creates a new summary fragment and adds the guess to the textview
     @Override
-    public void guessSubmitted(String Guess){
-        //TODO validate guess (check for errors)
+    public void guessSubmitted(String Guess, int bulls, int hits){
         //TODO also update bulls and hits numbers after guess is validated and submitted
 
         // Status = checkGuessValidity(Guess); <-- loop this until status = OK, use enum
         // bullsAndHits[] = submitValidGuess(Guess); <-- returns array where [0] is bulls and [1] is hits
 
-        addSummaryFragment(Guess); //<-- and array parameter for bulls and hits, then update the other two text views and the appropriate bulls and hits
+        addSummaryFragment(Guess, bulls, hits); //<-- and array parameter for bulls and hits, then update the other two text views and the appropriate bulls and hits
     }
 
     @Override
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
     }
 
     //TODO add parameter for bulls and hits
-    public void addSummaryFragment(String Guess){
+    public void addSummaryFragment(String Guess, int bulls, int hits){
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearlayout); //get linear layout
         FragmentManager fm = getSupportFragmentManager();
 
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
         frame.setId(R.id.holder); //some id
 
         // must add a new argument to summaryfrag to hold the int array of bulls and hits
-        summaryFrag summary = summaryFrag.newInstance(Guess); //make a brand new instance of a summaryFrag with argument of Guess
+        summaryFrag summary = summaryFrag.newInstance(Guess, bulls, hits); //make a brand new instance of a summaryFrag with argument of Guess
         fm.beginTransaction().add(frame.getId(), summary).commit(); //commit the fragment
 
         ll.addView(frame,0); //add the frame that holds the new fragment to the linearlayout

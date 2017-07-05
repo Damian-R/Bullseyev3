@@ -36,7 +36,7 @@ public class mainFragment extends Fragment {
     OnGameCreatedListener gameCreatedListener;
 
     public interface OnGuessSubmittedListener{
-        public void guessSubmitted(String guess);
+        public void guessSubmitted(String guess, int bulls, int hits);
     }
 
     public interface OnGameCreatedListener{
@@ -99,11 +99,13 @@ public class mainFragment extends Fragment {
                 String Guess = guess_txt.getText().toString();
                 Log.d("tag", Guess);
                 if(checkGuessValidity(Guess)){
-                    //TODO calculate bulls and cows
+                    submitValidGuess(Guess);
+                    int bulls = game.getBullsAndHits()[0];
+                    int hits = game.getBullsAndHits()[1];
                     //TODO also pass in bulls and cows to the guessSubmittedListener
-                    guessSubmittedListener.guessSubmitted(Guess);
+                    guessSubmittedListener.guessSubmitted(Guess, bulls, hits);
                 }
-                triesLeft.setText("Tries Left: " + (game.getMaxTries() - game.getCurrentTry() + 1));
+                triesLeft.setText("Tries Left: " + (game.getMaxTries() - game.getCurrentTry() + 1)); //update tries left on main fragment
                 guess_txt.setText("");
             }
         });
@@ -133,9 +135,26 @@ public class mainFragment extends Fragment {
             return false; //return false so the guess is not submitted
         }
         else {
-            game.tryComplete();
             return true; //if guess is valid, return true and add to current try
         }
+    }
+
+    public void submitValidGuess(String Guess){
+        game.setBullsAndHits(0,0);
+        String hiddenWord = game.getHiddenWord();
+        for(int HWChar = 0; HWChar < hiddenWord.length(); HWChar++){ //loop thru all hidden word's characters
+            for(int GChar = 0; GChar < hiddenWord.length(); GChar++){ //loop thru all of the guess's characters
+                if(hiddenWord.charAt(HWChar) == Guess.charAt(GChar)){ //if a common character is found
+                    if(HWChar == GChar) //same place
+                        game.addBullsAndHits(1,0); //add 1 bull
+                    else //not same place
+                        game.addBullsAndHits(0,1); //add 1 hit
+                }
+            }
+        }
+
+        game.tryComplete();
+
     }
 
     public ErrorList checkForErrors(String Guess){
