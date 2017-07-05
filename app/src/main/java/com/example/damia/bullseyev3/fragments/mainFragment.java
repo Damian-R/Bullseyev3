@@ -3,6 +3,7 @@ package com.example.damia.bullseyev3.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +20,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.damia.bullseyev3.R;
+import com.example.damia.bullseyev3.activities.GameWonActivity;
 import com.example.damia.bullseyev3.fragments.summaryFrag;
 import com.example.damia.bullseyev3.game.BullGame;
 
@@ -32,10 +34,10 @@ public class mainFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Button submitBtn;
-    BullGame game;
-    TextView hiddenWordLengthtxt;
-    TextView triesLeft;
+    private Button submitBtn;
+    private BullGame game;
+    private TextView hiddenWordLengthtxt;
+    private TextView triesLeft;
 
     OnGuessSubmittedListener guessSubmittedListener;
     OnGameCreatedListener gameCreatedListener;
@@ -48,7 +50,7 @@ public class mainFragment extends Fragment {
         public void gameCreated(BullGame game);
     }
 
-    public enum ErrorList{
+    private enum ErrorList{
         OK,
         Wrong_Length,
         Not_Isogram,
@@ -206,25 +208,25 @@ public class mainFragment extends Fragment {
     }
 
     public void gameWon(){ //method called when game is won
-        game.reset(); //reset game data
-
-        LinearLayout ll = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
-        ll.removeAllViews(); //clear linear layout view
-
-        hiddenWordLengthtxt.setText("Hidden Word Length: " + game.getHiddenWordLength());
-        triesLeft.setText("Tries Left: " + game.getMaxTries());
-
-        //TODO fancy game won message
+        startActivityForResult(new Intent(getActivity(), GameWonActivity.class), 1);
     }
 
     public void gameLost(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setMessage("Game over, you ran out of tries");
-        builder.setNegativeButton("Reset game", new DialogInterface.OnClickListener() {
+        builder.setMessage("Game over, you ran out of tries. Would you like to play again with a random word or the same word?");
+        builder.setNegativeButton("Same word", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                gameWon();
+                game.reset(false);
+                resetUI();
+            }
+        });
+        builder.setPositiveButton("Random word", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                game.reset(true);
+                resetUI();
             }
         });
 
@@ -232,5 +234,20 @@ public class mainFragment extends Fragment {
 
         alert.show();
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        game.reset(data.getBooleanExtra("random", true));
+        resetUI();
+    }
+
+    public void resetUI(){ //reset UI after game is won or lost
+        LinearLayout ll = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
+        ll.removeAllViews(); //clear linear layout view
+
+        hiddenWordLengthtxt.setText("Hidden Word Length: " + game.getHiddenWordLength());
+        triesLeft.setText("Tries Left: " + game.getMaxTries());
     }
 }

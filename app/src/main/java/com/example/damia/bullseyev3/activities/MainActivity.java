@@ -13,8 +13,8 @@ import com.example.damia.bullseyev3.game.BullGame;
 
 public class MainActivity extends AppCompatActivity implements mainFragment.OnGuessSubmittedListener, mainFragment.OnGameCreatedListener{
 
-    BullGame currentgame;
-    LinearLayout ll;
+    private BullGame currentgame;
+    private LinearLayout ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

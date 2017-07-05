@@ -29,12 +29,12 @@ public class BullGame {
     }
 
     public BullGame(){
-        reset();
+        reset(true);
     }
 
-    public void reset(){
-        hiddenWord = "ship";
-        currentTry = 1;
+    public void reset(boolean randomNewWord){
+        hiddenWord = "ship"; //TODO add hiddenWord randomization based on user input
+        currentTry = 1;      //TODO add maxTries depending on word length
         maxTries = 5;
         gameWon = false;
         return;
