@@ -10,9 +10,10 @@ public class BullGame {
     private int maxTries;
     private int currentTry;
 
-    private String[] threeWords = {"ate", "ape", "mad", "sad"}; //arrays containing all hidden words
-    private String[] fourWords = {"ship", "shop", "hike", "bath", "sing"};
-    private String[] fiveWords = {"candy", "stair", "build", "trays", "lacks", "dying", "plots"};
+    private String[] threeWords = {"ate", "ape", "mad", "sad", "ski"}; //arrays containing all hidden words
+    private String[] fourWords = {"ship", "shop", "hike", "bath", "sing", "plot", "lack", "tray", "beta"};
+    private String[] fiveWords = {"candy", "stair", "build", "dying", "water", "witch", "grief", "skier", "hotel"};
+    // it was too difficult to try to think of six letter isograms as guesses in testing, so five letters will be the max
 
     private Map<Integer, String[]> wordLists = new HashMap<Integer, String[]>(){{ //map containing all possible hidden words with different lengths
         put(3, threeWords);
@@ -24,7 +25,6 @@ public class BullGame {
         put(3, 7);
         put(4, 10);
         put(5, 13);
-        put(6, 15);
     }};
 
     public int[] bullsAndHits = {0,0};
@@ -39,11 +39,6 @@ public class BullGame {
     public void setBullsAndHits(int bulls, int hits){
         bullsAndHits[0] = bulls;
         bullsAndHits[1] = hits;
-    }
-
-    public void addBullsAndHits(int bulls, int hits){
-        bullsAndHits[0] += bulls;
-        bullsAndHits[1] += hits;
     }
 
     public void tryComplete(){

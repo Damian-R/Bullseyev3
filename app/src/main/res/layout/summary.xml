@@ -29,11 +29,11 @@
                 android:layout_width="100dp" />
 
             <ImageView
-                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@mipmap/icon"
+                app:srcCompat="@drawable/target_bullseye"
                 android:id="@+id/bulls_img"
-                android:layout_weight="0.11" />
+                android:layout_width="70dp"
+                android:padding="5dp" />
 
             <TextView
                 android:text="5"
@@ -47,11 +47,11 @@
                 android:paddingLeft="10dp" />
 
             <ImageView
-                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@android:drawable/ic_lock_lock"
+                app:srcCompat="@drawable/target_hit"
                 android:id="@+id/hits_img"
-                android:layout_weight="0.35" />
+                android:layout_width="70dp"
+                android:padding="5dp" />
 
             <TextView
                 android:text="3"
