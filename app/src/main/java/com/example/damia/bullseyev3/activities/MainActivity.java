@@ -3,8 +3,10 @@ package com.example.damia.bullseyev3.activities;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.example.damia.bullseyev3.R;
 import com.example.damia.bullseyev3.fragments.mainFragment;
@@ -15,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
 
     private BullGame currentgame;
     private LinearLayout ll;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
 
         FragmentManager fm = getSupportFragmentManager();
         mainFragment mainfrag = (mainFragment)fm.findFragmentById(R.id.mainfragment_container);
+
+        scrollView = (ScrollView) findViewById(R.id.scrollview);
 
         if(mainfrag == null){
             mainfrag = mainFragment.newInstance("","");
@@ -48,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
         currentgame = game;
     }
 
-    //TODO add parameter for bulls and hits
     public void addSummaryFragment(String Guess, int bulls, int hits){
         ll = (LinearLayout)findViewById(R.id.linearlayout); //get linear layout
         FragmentManager fm = getSupportFragmentManager();
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
         fm.beginTransaction().add(frame.getId(), summary).commit(); //commit the fragment
 
         ll.addView(frame,0); //add the frame that holds the new fragment to the linearlayout
+        scrollView.fullScroll(View.FOCUS_UP);
     }
 }
 

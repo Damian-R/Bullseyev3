@@ -27,18 +27,27 @@ public class GameWonActivity extends Activity{
         getWindow().setLayout((int)(width*0.87), (int)(height*0.7));
 
         Button randomWord = (Button)findViewById(R.id.randomwordbtn);
+        Button sameWord = (Button)findViewById(R.id.samewordbtn);
 
         randomWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent();
                 i.putExtra("random", true);
-                setResult(RESULT_OK,i);
+                setResult(RESULT_OK, i);
                 finish();
-
             }
         });
 
+        sameWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.putExtra("random", false);
+                setResult(RESULT_OK, i);
+                finish();
+            }
+        });
     }
 
     @Override
