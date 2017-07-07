@@ -95,6 +95,8 @@ public class mainFragment extends Fragment {
         triesLeft.setText("Tries Left: " + game.getMaxTries());
         gameCreatedListener.gameCreated(game);
 
+        Log.d("hidden word", game.getHiddenWord());
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +111,7 @@ public class mainFragment extends Fragment {
                     else //if game is won, call gameWon() method
                         gameWon();
                 }
-                if(game.getCurrentTry() > game.getMaxTries()) gameLost(); //if user is out of tries, call gameLost method
+                if((game.getCurrentTry() > game.getMaxTries()) && (!Guess.equals(game.getHiddenWord()))) gameLost(); //if user is out of tries, call gameLost method
 
                 triesLeft.setText("Tries Left: " + (game.getMaxTries() - game.getCurrentTry() + 1)); //update tries left on main fragment
                 guess_txt.setText("");
