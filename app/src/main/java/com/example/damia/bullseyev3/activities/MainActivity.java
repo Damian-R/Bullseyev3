@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
 
         scrollView = (ScrollView) findViewById(R.id.scrollview);
 
+        getWindow().setBackgroundDrawableResource(R.drawable.random_bg);
+
         if(mainfrag == null){
             mainfrag = mainFragment.newInstance("","");
             fm.beginTransaction().add(R.id.mainfragment_container, mainfrag).commit();

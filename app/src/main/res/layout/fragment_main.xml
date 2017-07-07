@@ -10,7 +10,7 @@
         android:orientation="horizontal"
         android:layout_width="353dp"
         android:layout_height="96dp"
-        android:background="@android:color/darker_gray"
+        android:background="@drawable/wood_panel"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
         android:id="@+id/main_layout"
@@ -29,7 +29,7 @@
                 android:id="@+id/hiddenWordLengthTxt"
                 android:layout_weight="0.71"
                 android:paddingLeft="20dp"
-                android:paddingTop="5dp" />
+                android:paddingTop="12dp" />
 
             <TextView
                 android:text="Tries Left:"
