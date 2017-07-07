@@ -135,7 +135,7 @@ public class mainFragment extends Fragment {
                 break;
             case Not_Lowercase: builder.setMessage("Your guess must contain only lowercase letters");
                 break;
-            case Invalid_Characters: builder.setMessage("Invalid input (only characters in the alphabet are permitted)");
+            case Invalid_Characters: builder.setMessage("Invalid input (only characters in the latin alphabet are permitted)");
         }
 
         //if status is not ok
@@ -199,9 +199,13 @@ public class mainFragment extends Fragment {
     public boolean isValidInput(String Guess){
         char[] chars = Guess.toCharArray();
         for(int i = 0; i < chars.length; i++){
-            if(!Character.isLetter(chars[i])) return false;
+            if(!isLatinLetter(chars[i])) return false;
         }
         return true;
+    }
+
+    public static boolean isLatinLetter(char c) {
+        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
     }
 
     public void gameWon(){ //method called when game is won
