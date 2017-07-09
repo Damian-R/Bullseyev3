@@ -2,6 +2,7 @@ package com.example.damia.bullseyev3.fragments;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -100,6 +102,7 @@ public class mainFragment extends Fragment {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long start = System.nanoTime();
                 String Guess = guess_txt.getText().toString();
                 Log.d("guess", Guess);
                 if(checkGuessValidity(Guess)){
@@ -109,12 +112,14 @@ public class mainFragment extends Fragment {
                     if(!game.gameWon) //if game is not won, submit the guess with bulls and hits
                         guessSubmittedListener.guessSubmitted(Guess, bulls, hits);
                     else //if game is won, call gameWon() method
-                        gameWon();
+                        gameEnd();
                 }
-                if((game.getCurrentTry() > game.getMaxTries()) && (!Guess.equals(game.getHiddenWord()))) gameLost(); //if user is out of tries, call gameLost method
+                if((game.getCurrentTry() > game.getMaxTries()) && (!Guess.equals(game.getHiddenWord()))) gameEnd(); //if user is out of tries, call gameLost method
 
                 triesLeft.setText("Tries Left: " + (game.getMaxTries() - game.getCurrentTry() + 1)); //update tries left on main fragment
                 guess_txt.setText("");
+                long end = System.nanoTime();
+                Log.d("click","" + (end-start) + "ns");
             }
         });
 
@@ -122,14 +127,18 @@ public class mainFragment extends Fragment {
     }
 
     public boolean checkGuessValidity(String Guess){
+        long start = System.nanoTime();
+        long start2 = System.nanoTime();
         ErrorList Status = checkForErrors(Guess);
+        long end2 = System.nanoTime();
+
+        Log.d("checkerror", "checking for errors took " + (end2 - start2) + "ns");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-
         // set alert message based on error type
         switch (Status){
-            case Wrong_Length: builder.setMessage("Wrong Length");
+            case Wrong_Length: builder.setMessage("Wrong length. Your guess must be " + game.getHiddenWordLength() + " letters long.");
                 break;
             case Not_Isogram: builder.setMessage("Your guess must be an isogram. (each character can only appear once)");
                 break;
@@ -137,7 +146,8 @@ public class mainFragment extends Fragment {
                 break;
             case Invalid_Characters: builder.setMessage("Invalid input (only characters in the latin alphabet are permitted)");
         }
-
+        long end = System.nanoTime();
+        Log.d("validity", "checking guess validity took " + (end-start) + "ns");
         //if status is not ok
         if(Status != ErrorList.OK){
             AlertDialog alert = builder.create(); //create an alert with message describing error
@@ -148,6 +158,9 @@ public class mainFragment extends Fragment {
         else {
             return true; //if guess is valid, return true and add to current try
         }
+
+
+
     }
 
     public void submitValidGuess(String Guess){
@@ -163,7 +176,6 @@ public class mainFragment extends Fragment {
                 }
             }
         }
-
         if(game.bullsAndHits[0] == hiddenWord.length()) game.gameWon = true;
 
         game.tryComplete();
@@ -181,7 +193,7 @@ public class mainFragment extends Fragment {
         Map<Character, Boolean> map = new HashMap();
 
         for(int i = 0; i < Guess.length(); i++){
-            if(map.get(Guess.charAt(i)) == null) //if the value for the key (character) is null (has not been changed since map initialization)
+            if(!map.containsKey(Guess.charAt(i)))//if the value for the key (character) is null (has not been changed since map initialization)
                 map.put(Guess.charAt(i), true); //then set it to true (indicating that it has been seen)
             else { //else (if the value at the character HAS been changed since initialization, ie. it has been seen)
                 Log.d("Character repeated", "" + Guess.charAt(i));
@@ -208,18 +220,15 @@ public class mainFragment extends Fragment {
         return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
     }
 
-    public void gameWon(){ //method called when game is won
+    public void gameEnd(){
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
         Intent i = new Intent(getActivity(), GameWonActivity.class);
         i.putExtra("result", game.gameWon);
         startActivityForResult(i, 1);
-    }
-
-    public void gameLost(){
-
-        Intent i = new Intent(getActivity(), GameWonActivity.class);
-        i.putExtra("result", game.gameWon);
-        startActivityForResult(i, 1);
-
     }
 
     @Override

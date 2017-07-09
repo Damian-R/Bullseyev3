@@ -3,6 +3,7 @@ package com.example.damia.bullseyev3.activities;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -31,8 +32,6 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
 
         getWindow().setBackgroundDrawableResource(R.mipmap.random_bg);
 
-
-
         if(mainfrag == null){
             mainfrag = mainFragment.newInstance("","");
             fm.beginTransaction().add(R.id.mainfragment_container, mainfrag).commit();
@@ -44,11 +43,6 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
     // creates a new summary fragment and adds the guess to the textview
     @Override
     public void guessSubmitted(String Guess, int bulls, int hits){
-        //TODO also update bulls and hits numbers after guess is validated and submitted
-
-        // Status = checkGuessValidity(Guess); <-- loop this until status = OK, use enum
-        // bullsAndHits[] = submitValidGuess(Guess); <-- returns array where [0] is bulls and [1] is hits
-
         addSummaryFragment(Guess, bulls, hits); //<-- and array parameter for bulls and hits, then update the other two text views and the appropriate bulls and hits
     }
 
@@ -58,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
     }
 
     public void addSummaryFragment(String Guess, int bulls, int hits){
+        long start = System.currentTimeMillis();
         ll = (LinearLayout)findViewById(R.id.linearlayout); //get linear layout
         FragmentManager fm = getSupportFragmentManager();
 
@@ -70,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements mainFragment.OnGu
 
         ll.addView(frame,0); //add the frame that holds the new fragment to the linearlayout
         scrollView.fullScroll(View.FOCUS_UP);
+        long end = System.currentTimeMillis();
+        Log.d("fragadd", "" + (end-start) + "ms");
     }
 }
 

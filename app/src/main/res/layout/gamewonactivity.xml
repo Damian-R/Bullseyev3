@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray">
+    android:background="@drawable/winscreen_bg1">
 
     <LinearLayout
         android:orientation="vertical"
@@ -14,11 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/bannerTxt"
-            android:textSize="40sp"
+            android:textSize="34sp"
             android:textStyle="normal|bold|italic"
             android:gravity="center_horizontal"
             android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:layout_marginTop="5dp" />
 
         <TextView
             android:text="Would you like to play again with the same word or a random word?"
@@ -28,28 +30,32 @@
             android:textSize="25sp"
             android:gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:padding="10dp" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
 
             <Button
             android:text="Random Word"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/randomwordbtn"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+                android:layout_marginRight="5dp" />
 
             <Button
                 android:text="Same Word"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/samewordbtn"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp" />
 
         </LinearLayout>
 
@@ -75,8 +81,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner"
                 android:layout_marginLeft="100dp"
-                android:layout_marginRight="100dp"
-                android:layout_marginBottom="15dp" />
+                android:layout_marginRight="100dp" />
 
             <Button
                 android:text="GO"

@@ -52,7 +52,6 @@ public class summaryFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.summary, container, false);
-
         prev_guess_txt = (TextView)v.findViewById(R.id.prev_guess_txt);
         bullsTxt = (TextView)v.findViewById(R.id.bulls_txt);
         hitsTxt = (TextView)v.findViewById(R.id.hits_txt);
