@@ -46,20 +46,20 @@ public class BullGame {
     }
 
     public BullGame(){
-        generateRandomWord();
-        reset(false);
+        hiddenWord = "ship";
+        //generateRandomWord();
+        reset(false, 0);
     }
 
-    public void reset(boolean randomNewWord){
-        if(randomNewWord) generateRandomWord();
+    public void reset(boolean randomNewWord, int length){
+        if(randomNewWord) generateRandomWord(length);
         currentTry = 1;
         maxTries = appropriateMaxTries.get(getHiddenWordLength()); //get max tries based on hidden word length
         gameWon = false;
         return;
     }
 
-    private void generateRandomWord(){ //TODO add parameter for user input on word length to determine length variable
-        int length = (int)(3 * Math.random() + 3);
+    private void generateRandomWord(int length){ //TODO add parameter for user input on word length to determine length variable
         Log.d("word length", "" + length);
         String[] words = wordLists.get(length);
         int wordPosition = (int)(words.length * Math.random());

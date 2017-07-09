@@ -209,38 +209,23 @@ public class mainFragment extends Fragment {
     }
 
     public void gameWon(){ //method called when game is won
-        startActivityForResult(new Intent(getActivity(), GameWonActivity.class), 1);
+        Intent i = new Intent(getActivity(), GameWonActivity.class);
+        i.putExtra("result", game.gameWon);
+        startActivityForResult(i, 1);
     }
 
     public void gameLost(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setMessage("Game over, you ran out of tries. Would you like to play again with a random word or the same word?");
-        builder.setNegativeButton("Same word", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                game.reset(false);
-                resetUI();
-            }
-        });
-        builder.setPositiveButton("Random word", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-                game.reset(true);
-                resetUI();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-
-        alert.show();
+        Intent i = new Intent(getActivity(), GameWonActivity.class);
+        i.putExtra("result", game.gameWon);
+        startActivityForResult(i, 1);
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        game.reset(data.getBooleanExtra("random", true));
+        game.reset(data.getBooleanExtra("random", true), data.getIntExtra("length", 3));
         resetUI();
     }
 
